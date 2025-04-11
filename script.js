@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = '/.netlify/functions/api';
 
 // Theme toggle functionality
 const themeToggle = document.getElementById('theme-toggle');

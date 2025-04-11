@@ -1,0 +1,14 @@
+[build]
+  command = "npm install"
+  publish = "."
+  functions = "functions"
+
+[functions]
+  external_node_modules = ["express", "cors", "dotenv", "@octokit/rest"]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true 
