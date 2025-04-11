@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA-Punk Kanban</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 transition-colors duration-300">
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-gray-200 p-6 rounded-lg w-full max-w-md">
+            <h3 class="text-xl font-mono font-bold mb-4 text-gray-800">TASK DETAILS</h3>
+            <form id="taskForm" class="space-y-4">
+                <input type="hidden" id="taskId">
+                <div>
+                    <label class="block font-mono text-sm mb-1">TITLE</label>
+                    <input type="text" id="taskTitle" class="w-full p-2 rounded bg-gray-300 font-mono" required>
+                </div>
+                <div>
+                    <label class="block font-mono text-sm mb-1">DESCRIPTION</label>
+                    <textarea id="taskDescription" class="w-full p-2 rounded bg-gray-300 font-mono h-20"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-mono text-sm mb-1">STATUS</label>
+                        <select id="taskStatus" class="w-full p-2 rounded bg-gray-300 font-mono">
+                            <option value="todo-list">PENDING</option>
+                            <option value="in-progress-list">IN PROGRESS</option>
+                            <option value="done-list">COMPLETED</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-mono text-sm mb-1">PRIORITY</label>
+                        <select id="taskPriority" class="w-full p-2 rounded bg-gray-300 font-mono">
+                            <option value="low">LOW</option>
+                            <option value="medium">MEDIUM</option>
+                            <option value="high">HIGH</option>
+                            <option value="critical">CRITICAL</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-sm mb-1">ASSIGNEE</label>
+                    <input type="text" id="taskAssignee" class="w-full p-2 rounded bg-gray-300 font-mono">
+                </div>
+                <div>
+                    <label class="block font-mono text-sm mb-1">DUE DATE</label>
+                    <input type="date" id="taskDueDate" class="w-full p-2 rounded bg-gray-300 font-mono">
+                </div>
+                <div>
+                    <label class="block font-mono text-sm mb-1">TAGS (COMMA SEPARATED)</label>
+                    <input type="text" id="taskTags" class="w-full p-2 rounded bg-gray-300 font-mono">
+                </div>
+                <div>
+                    <label class="block font-mono text-sm mb-1">LINKS (COMMA SEPARATED)</label>
+                    <input type="text" id="taskLinks" class="w-full p-2 rounded bg-gray-300 font-mono">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeTaskModal()" class="px-4 py-2 bg-gray-400 rounded font-mono">CANCEL</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-400 rounded font-mono">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Archive Modal -->
+    <div id="archiveModal" class="modal hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div class="modal-content bg-gray-200 p-6 rounded-lg w-full max-w-4xl max-h-[80vh] overflow-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-mono font-bold text-gray-800">ARCHIVED TASKS</h3>
+                <button onclick="closeArchiveModal()" class="px-4 py-2 bg-gray-400 rounded font-mono">CLOSE</button>
+            </div>
+            <div id="archivedTasksList" class="space-y-2">
+                <!-- Archived tasks will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-mono font-bold text-gray-800">MISSION CONTROL</h1>
+            <div class="flex gap-4">
+                <button id="viewArchiveButton" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
+                    VIEW ARCHIVE
+                </button>
+                <button id="archiveButton" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
+                    ARCHIVE DONE
+                </button>
+                <button id="theme-toggle" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
+                    TOGGLE DARK MODE
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Todo Column -->
+            <div class="kanban-column bg-gray-200 p-4 rounded-lg">
+                <h2 class="text-xl font-mono font-bold mb-4 text-gray-800">PENDING TASKS</h2>
+                <div id="todo-list" class="space-y-2 min-h-[200px]">
+                    <!-- Tasks will be added here -->
+                </div>
+                <button onclick="openNewTaskModal('todo-list')" class="mt-4 w-full px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
+                    + NEW TASK
+                </button>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="kanban-column bg-gray-200 p-4 rounded-lg">
+                <h2 class="text-xl font-mono font-bold mb-4 text-gray-800">IN PROGRESS</h2>
+                <div id="in-progress-list" class="space-y-2 min-h-[200px]">
+                    <!-- Tasks will be added here -->
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="kanban-column bg-gray-200 p-4 rounded-lg">
+                <h2 class="text-xl font-mono font-bold mb-4 text-gray-800">COMPLETED</h2>
+                <div id="done-list" class="space-y-2 min-h-[200px]">
+                    <!-- Tasks will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

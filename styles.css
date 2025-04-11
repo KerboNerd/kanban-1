@@ -1,0 +1,161 @@
+/* NASA-Punk Theme Styles */
+:root {
+    --primary-light: #e5e7eb;
+    --secondary-light: #d1d5db;
+    --text-light: #1f2937;
+    --accent-light: #9ca3af;
+    
+    --primary-dark: #1f2937;
+    --secondary-dark: #374151;
+    --text-dark: #f3f4f6;
+    --accent-dark: #4b5563;
+
+    /* Priority Colors */
+    --priority-low: #10B981;
+    --priority-medium: #F59E0B;
+    --priority-high: #EF4444;
+    --priority-critical: #DC2626;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-light);
+    border-radius: 4px;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: var(--primary-dark) !important;
+}
+
+body.dark-mode .kanban-column,
+body.dark-mode .modal-content {
+    background-color: var(--secondary-dark) !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode .task-card,
+body.dark-mode label {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode button,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: var(--accent-dark) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--text-dark);
+}
+
+body.dark-mode button:hover {
+    background-color: var(--secondary-dark) !important;
+}
+
+/* Task card styles */
+.task-card {
+    font-family: monospace;
+    border: 2px solid var(--accent-light);
+    transition: all 0.3s ease;
+    cursor: grab;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-card:active {
+    cursor: grabbing;
+}
+
+/* Priority indicators */
+.priority-low {
+    border-left: 4px solid var(--priority-low);
+}
+
+.priority-medium {
+    border-left: 4px solid var(--priority-medium);
+}
+
+.priority-high {
+    border-left: 4px solid var(--priority-high);
+}
+
+.priority-critical {
+    border-left: 4px solid var(--priority-critical);
+}
+
+/* Screen effect */
+.kanban-column {
+    position: relative;
+    overflow: hidden;
+}
+
+.kanban-column::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+}
+
+/* Modal styles */
+.modal {
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+}
+
+.modal-content {
+    z-index: 1001;
+    position: relative;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+/* Tags */
+.task-tag {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    background-color: var(--accent-light);
+    color: var(--text-light);
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+body.dark-mode .task-tag {
+    background-color: var(--accent-dark);
+    color: var(--text-dark);
+}
+
+/* Dragging effect */
+.dragging {
+    opacity: 0.5;
+}
+
+/* Archive indicator */
+.archived {
+    opacity: 0.5;
+    pointer-events: none;
+} 
