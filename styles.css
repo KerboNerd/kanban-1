@@ -68,6 +68,14 @@ body.dark-mode button:hover {
     border: 2px solid var(--accent-light);
     transition: all 0.3s ease;
     cursor: grab;
+    background-color: var(--primary-light);
+    color: var(--text-light);
+}
+
+body.dark-mode .task-card {
+    background-color: var(--primary-dark);
+    color: var(--text-dark);
+    border-color: var(--accent-dark);
 }
 
 .task-card:hover {
@@ -94,6 +102,22 @@ body.dark-mode button:hover {
 
 .priority-critical {
     border-left: 4px solid var(--priority-critical);
+}
+
+body.dark-mode .priority-low {
+    border-left: 4px solid #34D399;
+}
+
+body.dark-mode .priority-medium {
+    border-left: 4px solid #FBBF24;
+}
+
+body.dark-mode .priority-high {
+    border-left: 4px solid #F87171;
+}
+
+body.dark-mode .priority-critical {
+    border-left: 4px solid #EF4444;
 }
 
 /* Screen effect */
@@ -158,4 +182,39 @@ body.dark-mode .task-tag {
 .archived {
     opacity: 0.5;
     pointer-events: none;
+}
+
+/* Footer Styles */
+footer {
+    background: var(--primary-light);
+    border-top: 2px solid var(--accent-light);
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+}
+
+body.dark-mode footer {
+    background: var(--primary-dark);
+    border-color: var(--accent-dark);
+}
+
+body.dark-mode footer .text-gray-600 {
+    color: var(--text-dark);
+    opacity: 0.7;
 } 

@@ -1,0 +1,188 @@
+/* Points System Styles */
+.points-container {
+    background: rgba(26, 32, 44, 0.95);
+    border: 2px solid var(--apollo-highlight);
+    border-radius: 8px;
+    padding: 0.6rem;
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
+    position: absolute;
+    top: 1rem;
+    left: 0rem;
+    width: 280px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+/* Scanline effect */
+.points-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 255, 157, 0.05) 50%,
+        transparent 100%
+    );
+    animation: scanline 4s linear infinite;
+    pointer-events: none;
+}
+
+/* Mission Points */
+.mission-points {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--mercury-glow);
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.points-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00ff9d, #00b8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.points-label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-align: right;
+}
+
+/* Points Details */
+.points-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--mercury-text);
+}
+
+.points-details > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Rank Display */
+.rank-value {
+    font-weight: bold;
+    text-shadow: 0 0 5px currentColor;
+}
+
+/* Streak Counter */
+.streak {
+    color: var(--mercury-text);
+    opacity: 0.9;
+}
+
+.streak-value {
+    color: var(--mercury-glow);
+    font-weight: bold;
+}
+
+/* Stats Display */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    color: var(--mercury-text);
+    opacity: 0.8;
+    font-size: 0.7rem;
+    border-top: 1px solid rgba(0, 255, 157, 0.2);
+    padding-top: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+/* Notifications */
+.achievement-notification,
+.rank-notification,
+.points-notification {
+    animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-in 4.7s;
+    background: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(44, 55, 77, 0.95));
+    border: 2px solid var(--mercury-glow);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+    position: fixed;
+    top: 5rem;
+    left: 1rem;
+    z-index: 50;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.achievement-notification {
+    border-color: #FFD700;
+}
+
+/* Animations */
+@keyframes scanline {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Dark Mode Adjustments */
+.dark-mode .points-container {
+    background: rgba(17, 24, 39, 0.95);
+    border-color: var(--mercury-blue);
+}
+
+.dark-mode .mission-points {
+    color: var(--mercury-glow);
+}
+
+.dark-mode .stats {
+    border-color: rgba(0, 255, 157, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .points-container {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .points-value {
+        font-size: 1.75rem;
+    }
+
+    .stats {
+        font-size: 0.65rem;
+    }
+} 

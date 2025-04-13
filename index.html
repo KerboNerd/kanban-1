@@ -6,60 +6,91 @@
     <title>NASA-Punk Kanban</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="nasa-punk-theme.css">
+    <link rel="stylesheet" href="points-system.css">
+    <style>
+        :root {
+            /* NASA-Punk Theme Colors */
+            --apollo-primary: #f3f4f6;
+            --apollo-secondary: #e5e7eb;
+            --apollo-highlight: #3b82f6;
+            --apollo-red: #ef4444;
+            --apollo-text: #1f2937;
+            
+            /* Mercury Theme Colors (Dark Mode) */
+            --mercury-primary: #1f2937;
+            --mercury-secondary: #374151;
+            --mercury-blue: #0ea5e9;
+            --mercury-glow: #00ff9d;
+            --mercury-red: #ef4444;
+            --mercury-text: #f3f4f6;
+            --mercury-accent: #1e40af;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 transition-colors duration-300">
+<body class="bg-gray-100 transition-colors duration-300 min-h-screen flex flex-col" id="app-body">
     <!-- Task Modal -->
     <div id="taskModal" class="modal hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="modal-content bg-gray-200 p-6 rounded-lg w-full max-w-md">
-            <h3 class="text-xl font-mono font-bold mb-4 text-gray-800">TASK DETAILS</h3>
-            <form id="taskForm" class="space-y-4">
+        <div class="modal-content bg-gray-200 p-4 rounded-lg w-full max-w-md">
+            <h3 class="text-xl font-mono font-bold mb-2 text-gray-800">TASK DETAILS</h3>
+            <form id="taskForm" class="space-y-2">
                 <input type="hidden" id="taskId">
-                <div>
-                    <label class="block font-mono text-sm mb-1">TITLE</label>
-                    <input type="text" id="taskTitle" class="w-full p-2 rounded bg-gray-300 font-mono" required>
-                </div>
-                <div>
-                    <label class="block font-mono text-sm mb-1">DESCRIPTION</label>
-                    <textarea id="taskDescription" class="w-full p-2 rounded bg-gray-300 font-mono h-20"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-mono text-sm mb-1">STATUS</label>
-                        <select id="taskStatus" class="w-full p-2 rounded bg-gray-300 font-mono">
+                        <label class="block font-mono text-xs mb-0.5">TITLE</label>
+                        <input type="text" id="taskTitle" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">STATUS</label>
+                        <select id="taskStatus" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
                             <option value="todo-list">PENDING</option>
                             <option value="in-progress-list">IN PROGRESS</option>
                             <option value="done-list">COMPLETED</option>
                         </select>
                     </div>
+                </div>
+                <div>
+                    <label class="block font-mono text-xs mb-0.5">DESCRIPTION</label>
+                    <textarea id="taskDescription" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm h-16"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-mono text-sm mb-1">PRIORITY</label>
-                        <select id="taskPriority" class="w-full p-2 rounded bg-gray-300 font-mono">
+                        <label class="block font-mono text-xs mb-0.5">PRIORITY</label>
+                        <select id="taskPriority" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
                             <option value="low">LOW</option>
                             <option value="medium">MEDIUM</option>
                             <option value="high">HIGH</option>
                             <option value="critical">CRITICAL</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">DUE DATE</label>
+                        <input type="date" id="taskDueDate" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-mono text-sm mb-1">ASSIGNEE</label>
-                    <input type="text" id="taskAssignee" class="w-full p-2 rounded bg-gray-300 font-mono">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">ASSIGNEE</label>
+                        <input type="text" id="taskAssignee" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">ASSIGNED TO</label>
+                        <input type="text" id="taskAssignedTo" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-mono text-sm mb-1">DUE DATE</label>
-                    <input type="date" id="taskDueDate" class="w-full p-2 rounded bg-gray-300 font-mono">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">TAGS (COMMA SEPARATED)</label>
+                        <input type="text" id="taskTags" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-xs mb-0.5">LINKS (COMMA SEPARATED)</label>
+                        <input type="text" id="taskLinks" class="w-full p-1.5 rounded bg-gray-300 font-mono text-sm">
+                    </div>
                 </div>
-                <div>
-                    <label class="block font-mono text-sm mb-1">TAGS (COMMA SEPARATED)</label>
-                    <input type="text" id="taskTags" class="w-full p-2 rounded bg-gray-300 font-mono">
-                </div>
-                <div>
-                    <label class="block font-mono text-sm mb-1">LINKS (COMMA SEPARATED)</label>
-                    <input type="text" id="taskLinks" class="w-full p-2 rounded bg-gray-300 font-mono">
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeTaskModal()" class="px-4 py-2 bg-gray-400 rounded font-mono">CANCEL</button>
-                    <button type="submit" class="px-4 py-2 bg-gray-400 rounded font-mono">SAVE</button>
+                <div class="flex justify-end space-x-2 mt-2">
+                    <button type="button" onclick="closeTaskModal()" class="px-3 py-1.5 bg-gray-400 rounded font-mono text-sm">CANCEL</button>
+                    <button type="submit" class="px-3 py-1.5 bg-gray-400 rounded font-mono text-sm">SAVE</button>
                 </div>
             </form>
         </div>
@@ -78,18 +109,16 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8">
-        <header class="flex justify-between items-center mb-8">
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <header class="header flex flex-col items-center mb-8">
             <h1 class="text-3xl font-mono font-bold text-gray-800">MISSION CONTROL</h1>
-            <div class="flex gap-4">
+            <div class="flex gap-4 mt-4">
                 <button id="viewArchiveButton" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
                     VIEW ARCHIVE
                 </button>
                 <button id="archiveButton" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
                     ARCHIVE DONE
-                </button>
-                <button id="theme-toggle" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
-                    TOGGLE DARK MODE
                 </button>
             </div>
         </header>
@@ -123,6 +152,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-200 py-4 px-4 mt-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-sm font-mono text-gray-600">SYSTEM STATUS: OPERATIONAL</div>
+            <button id="theme-toggle" class="px-4 py-2 bg-gray-300 rounded font-mono text-gray-800 hover:bg-gray-400 transition-colors">
+                TOGGLE DARK MODE
+            </button>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
+    <script src="theme-switcher.js"></script>
+    <script src="points-system.js"></script>
 </body>
 </html> 

@@ -2,13 +2,27 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Octokit } = require('octokit');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Debug logs
+console.log('Environment variables loaded:');
+console.log('PORT:', process.env.PORT);
+console.log('GITHUB_TOKEN:', process.env.GITHUB_TOKEN ? '***' : 'Not found');
+console.log('GITHUB_OWNER:', process.env.GITHUB_OWNER);
+console.log('GITHUB_REPO:', process.env.GITHUB_REPO);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static('.'));  // Serve static files from current directory
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Initialize Octokit
 const octokit = new Octokit({
@@ -35,9 +49,10 @@ function taskToIssue(task) {
         '',
         '### Metadata',
         `- **Assignee**: ${task.assignee || 'Unassigned'}`,
+        `- **Assigned To**: ${task.assignedTo || 'Unassigned'}`,
         `- **Due Date**: ${task.dueDate || 'No due date'}`,
-        `- **Created At**: ${task.createdAt}`,
-        `- **Updated At**: ${task.updatedAt}`,
+        `- **Created At**: ${task.createdAt || new Date().toISOString()}`,
+        `- **Updated At**: ${new Date().toISOString()}`,
         '',
         '### Links',
         ...(task.links || []).map(link => `- ${link}`)
@@ -80,7 +95,9 @@ function issueToTask(issue) {
         }
         if (currentSection === 'metadata' && line.includes(':')) {
             const [key, value] = line.split(':').map(s => s.trim());
-            metadata[key.replace('-', '')] = value;
+            const cleanKey = key.replace(/-|\*|\s/g, '').toLowerCase();
+            const cleanValue = value.replace(/\*|\s/g, '');
+            metadata[cleanKey] = cleanValue === 'Noduedate' ? null : cleanValue;
         }
         if (currentSection === 'links' && line.trim()) {
             links.push(line.replace('-', '').trim());
@@ -93,29 +110,48 @@ function issueToTask(issue) {
         description: description.trim(),
         status: `${status}-list`,
         priority: priority,
-        assignee: metadata.Assignee,
-        dueDate: metadata.DueDate,
+        assignee: metadata.assignee,
+        assignedTo: metadata.assignedto,
+        dueDate: metadata.duedate,
         tags: tags,
         links: links,
-        createdAt: metadata.CreatedAt,
-        updatedAt: metadata.UpdatedAt
+        createdAt: metadata.createdat,
+        updatedAt: metadata.updatedat
     };
 }
 
 // Routes
 app.get('/api/tasks', async (req, res) => {
     try {
+        console.log('Fetching tasks from GitHub...');
+        console.log('Using owner:', OWNER);
+        console.log('Using repo:', REPO);
+        
         const response = await octokit.rest.issues.listForRepo({
             owner: OWNER,
             repo: REPO,
             state: 'all'
         });
 
+        console.log('GitHub API response:', response.status);
+        console.log('Number of issues:', response.data.length);
+        console.log('First issue labels:', response.data[0]?.labels);
+        
         const tasks = response.data.map(issueToTask);
+        console.log('Converted tasks:', tasks);
+        
         res.json(tasks);
     } catch (error) {
-        console.error('Error fetching tasks:', error);
-        res.status(500).json({ error: 'Failed to fetch tasks' });
+        console.error('Detailed error fetching tasks:', {
+            message: error.message,
+            status: error.status,
+            response: error.response?.data,
+            headers: error.response?.headers
+        });
+        res.status(500).json({ 
+            error: 'Failed to fetch tasks',
+            details: error.message 
+        });
     }
 });
 

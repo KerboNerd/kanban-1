@@ -1,0 +1,416 @@
+/* NASA-Punk Theme 2.0 - Apollo & Mercury Inspired */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+  /* Apollo Light Theme Colors */
+  --apollo-primary: #f0f2f5;
+  --apollo-secondary: #e2e4e9;
+  --apollo-accent: #b0b5c1;
+  --apollo-text: #1b2838;
+  --apollo-metallic: #8c8f96;
+  --apollo-highlight: #0b3d91; /* NASA Blue */
+  --apollo-red: #fc3d21; /* NASA Red */
+  
+  /* Mercury Dark Theme Colors */
+  --mercury-primary: #0c0e12;
+  --mercury-secondary: #1a1f2b;
+  --mercury-accent: #2a3142;
+  --mercury-text: #e6eaf0;
+  --mercury-glow: #00ff9d; /* Retro Terminal Green */
+  --mercury-blue: #4c7bd9;
+  --mercury-red: #ff4f4f;
+
+  /* Common Colors */
+  --priority-low: #4caf50;
+  --priority-medium: #ff9800;
+  --priority-high: #f44336;
+  --priority-critical: #d32f2f;
+
+  /* NASA Grid */
+  --grid-size: 20px;
+  --grid-strength: 0.1;
+}
+
+/* Base Theme Styles */
+.nasa-punk-v2 {
+  transition: background-color 0.3s ease;
+  background-color: var(--apollo-primary);
+  color: var(--apollo-text);
+  font-family: 'Share Tech Mono', monospace;
+  background-image: 
+    linear-gradient(0deg, rgba(0, 0, 0, var(--grid-strength)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, var(--grid-strength)) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  will-change: background-color;
+}
+
+.nasa-punk-v2.dark-mode {
+  background-color: var(--mercury-primary);
+  color: var(--mercury-text);
+  --grid-strength: 0.2;
+  background-image: 
+    linear-gradient(0deg, rgba(76, 123, 217, var(--grid-strength)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 123, 217, var(--grid-strength)) 1px, transparent 1px);
+}
+
+/* Enhanced Mission Control Header */
+.nasa-punk-v2 .header {
+  border-bottom: 2px solid var(--apollo-red);
+  margin-bottom: 2rem !important;
+  padding: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(11, 61, 145, 0.05),
+    transparent
+  );
+  will-change: transform;
+}
+
+.nasa-punk-v2 .header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--apollo-highlight);
+  box-shadow: 0 0 5px rgba(11, 61, 145, 0.2);
+}
+
+.nasa-punk-v2 .header h1 {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  position: relative !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+  color: var(--apollo-highlight) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.nasa-punk-v2 .header h1::before {
+  content: "MISSION CONTROL CENTER";
+  font-size: 0.75rem;
+  color: var(--apollo-red);
+  display: block;
+  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+  animation: smooth-blink 3s ease-in-out infinite;
+  font-weight: normal;
+  opacity: 0.9;
+}
+
+.nasa-punk-v2 .header h1::after {
+  content: "KANBAN OPERATIONS SYSTEM";
+  font-size: 0.875rem;
+  color: var(--apollo-highlight);
+  display: block;
+  margin-top: 0.5rem;
+  letter-spacing: 2px;
+  font-weight: normal;
+}
+
+.nasa-punk-v2.dark-mode .header {
+  border-color: var(--mercury-glow);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(0, 255, 157, 0.05),
+    transparent
+  );
+}
+
+.nasa-punk-v2.dark-mode .header::before {
+  background: var(--mercury-glow);
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+}
+
+.nasa-punk-v2.dark-mode .header h1 {
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+.nasa-punk-v2.dark-mode .header h1::before {
+  color: var(--mercury-glow);
+}
+
+.nasa-punk-v2.dark-mode .header h1::after {
+  color: var(--mercury-blue);
+}
+
+/* Mission Time Display */
+.nasa-punk-v2 .header::after {
+  content: attr(data-time);
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.875rem;
+  color: var(--apollo-highlight);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.nasa-punk-v2.dark-mode .header::after {
+  color: var(--mercury-glow);
+}
+
+/* Kanban Columns */
+.nasa-punk-v2 .kanban-column {
+  background: var(--apollo-secondary);
+  border: 2px solid var(--apollo-highlight);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(11, 61, 145, 0.1);
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.nasa-punk-v2.dark-mode .kanban-column {
+  background: rgba(26, 31, 43, 0.8);
+  border-color: var(--mercury-blue);
+  box-shadow: 0 4px 6px rgba(0, 255, 157, 0.1);
+}
+
+/* Column Headers */
+.nasa-punk-v2 .kanban-column h2 {
+  position: relative;
+  padding-left: 20px;
+}
+
+.nasa-punk-v2 .kanban-column h2::before {
+  content: "■";
+  position: absolute;
+  left: 0;
+  color: var(--apollo-red);
+  animation: blink 2s infinite;
+}
+
+.nasa-punk-v2.dark-mode .kanban-column h2::before {
+  color: var(--mercury-glow);
+}
+
+/* Scan Line and CRT Effects */
+.nasa-punk-v2 .kanban-column::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(11, 61, 145, 0.05) 50%,
+    transparent 100%
+  );
+  transform: translateY(-100%);
+  animation: scanline 8s linear infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.nasa-punk-v2.dark-mode .kanban-column::before {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 157, 0.05) 50%,
+    transparent 100%
+  );
+}
+
+/* Task Cards */
+.nasa-punk-v2 .task-card {
+  background: var(--apollo-primary);
+  border: 1px solid var(--apollo-highlight);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Share Tech Mono', monospace;
+  will-change: transform;
+}
+
+.nasa-punk-v2 .task-card::before {
+  content: "TASK ID: " attr(data-id);
+  font-size: 0.7rem;
+  color: var(--apollo-red);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.nasa-punk-v2.dark-mode .task-card {
+  background: rgba(42, 49, 66, 0.9);
+  border-color: var(--mercury-blue);
+}
+
+.nasa-punk-v2.dark-mode .task-card::before {
+  color: var(--mercury-glow);
+}
+
+/* Buttons */
+.nasa-punk-v2 button {
+  background: var(--apollo-highlight);
+  border: 1px solid var(--apollo-red);
+  color: white;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  will-change: transform;
+}
+
+.nasa-punk-v2.dark-mode button {
+  background: var(--mercury-accent);
+  border-color: var(--mercury-glow);
+  color: var(--mercury-glow);
+}
+
+.nasa-punk-v2 button:hover {
+  background: var(--apollo-red);
+  transform: translateY(-1px);
+}
+
+.nasa-punk-v2.dark-mode button:hover {
+  background: var(--mercury-blue);
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+}
+
+/* Form Elements */
+.nasa-punk-v2 input,
+.nasa-punk-v2 textarea,
+.nasa-punk-v2 select {
+  background: rgba(240, 242, 245, 0.9);
+  border: 1px solid var(--apollo-highlight);
+  color: var(--apollo-text);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.nasa-punk-v2.dark-mode input,
+.nasa-punk-v2.dark-mode textarea,
+.nasa-punk-v2.dark-mode select {
+  background: rgba(42, 49, 66, 0.9);
+  border-color: var(--mercury-blue);
+  color: var(--mercury-text);
+}
+
+.nasa-punk-v2 input:focus,
+.nasa-punk-v2 textarea:focus,
+.nasa-punk-v2 select:focus {
+  border-color: var(--apollo-red);
+  box-shadow: 0 0 0 2px rgba(252, 61, 33, 0.2);
+  outline: none;
+}
+
+.nasa-punk-v2.dark-mode input:focus,
+.nasa-punk-v2.dark-mode textarea:focus,
+.nasa-punk-v2.dark-mode select:focus {
+  border-color: var(--mercury-glow);
+  box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
+}
+
+/* Priority Indicators with NASA Colors */
+.nasa-punk-v2 .priority-low {
+  border-left: 4px solid var(--apollo-highlight);
+}
+
+.nasa-punk-v2 .priority-medium {
+  border-left: 4px solid var(--apollo-red);
+}
+
+.nasa-punk-v2 .priority-high {
+  border-left: 4px solid var(--mercury-red);
+}
+
+.nasa-punk-v2 .priority-critical {
+  border-left: 4px solid var(--priority-critical);
+  animation: critical-pulse 2s steps(2) infinite;
+}
+
+/* Optimized Animations */
+@keyframes scanline {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(200%); }
+}
+
+@keyframes smooth-blink {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes critical-pulse {
+  0%, 100% { border-left-color: var(--priority-critical); }
+  50% { border-left-color: var(--mercury-red); }
+}
+
+/* Task Card Hover Effects */
+.nasa-punk-v2.dark-mode .task-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.nasa-punk-v2.dark-mode .task-card:hover::after {
+  transform: translateX(100%);
+}
+
+/* NASA-style Tags */
+.nasa-punk-v2 .task-tag {
+  background: var(--apollo-highlight);
+  color: white;
+  border-radius: 2px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nasa-punk-v2.dark-mode .task-tag {
+  background: var(--mercury-blue);
+  color: var(--mercury-text);
+  box-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+}
+
+/* Modal Overlay */
+.nasa-punk-v2 .modal {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.nasa-punk-v2 .modal-content {
+  background: var(--apollo-secondary);
+  border: 2px solid var(--apollo-highlight);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(11, 61, 145, 0.2);
+  will-change: transform;
+}
+
+.nasa-punk-v2.dark-mode .modal-content {
+  background: rgba(26, 31, 43, 0.95);
+  border-color: var(--mercury-glow);
+  box-shadow: 0 8px 32px rgba(0, 255, 157, 0.1);
+} 

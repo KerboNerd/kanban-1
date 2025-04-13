@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = '/.netlify/functions/api';
+const API_BASE_URL = '/api';
 
 // Theme toggle functionality
 const themeToggle = document.getElementById('theme-toggle');
@@ -21,8 +21,8 @@ async function loadTasks() {
         if (!response.ok) throw new Error('Failed to fetch tasks');
         
         const allTasks = await response.json();
-        tasks = allTasks.filter(task => task.status !== 'done-list');
-        archivedTasks = allTasks.filter(task => task.status === 'done-list');
+        tasks = allTasks;
+        archivedTasks = []; // Only tasks explicitly archived will go here
         
         renderAllTasks();
     } catch (error) {
@@ -92,8 +92,9 @@ function openEditTaskModal(taskId) {
     document.getElementById('taskDescription').value = task.description;
     document.getElementById('taskStatus').value = task.status;
     document.getElementById('taskPriority').value = task.priority;
-    document.getElementById('taskAssignee').value = task.assignee;
-    document.getElementById('taskDueDate').value = task.dueDate;
+    document.getElementById('taskAssignee').value = task.assignee || '';
+    document.getElementById('taskAssignedTo').value = task.assignedTo || '';
+    document.getElementById('taskDueDate').value = task.dueDate || '';
     document.getElementById('taskTags').value = task.tags.join(', ');
     document.getElementById('taskLinks').value = task.links.join(', ');
 
@@ -232,7 +233,8 @@ taskForm.addEventListener('submit', async (e) => {
         status: document.getElementById('taskStatus').value,
         priority: document.getElementById('taskPriority').value,
         assignee: document.getElementById('taskAssignee').value,
-        dueDate: document.getElementById('taskDueDate').value,
+        assignedTo: document.getElementById('taskAssignedTo').value,
+        dueDate: document.getElementById('taskDueDate').value || null,
         tags: document.getElementById('taskTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
         links: document.getElementById('taskLinks').value.split(',').map(link => link.trim()).filter(link => link),
         createdAt: currentTaskId ? tasks.find(t => t.id === currentTaskId).createdAt : new Date().toISOString(),
@@ -244,6 +246,10 @@ taskForm.addEventListener('submit', async (e) => {
         
         if (currentTaskId) {
             const index = tasks.findIndex(t => t.id === currentTaskId);
+            if (tasks[index].status !== 'done-list' && task.status === 'done-list') {
+                // Task was just completed
+                window.pointsSystem.handleTaskCompletion(task);
+            }
             tasks[index] = task;
         } else {
             tasks.push(task);
@@ -258,6 +264,8 @@ taskForm.addEventListener('submit', async (e) => {
 });
 
 function createTaskCard(task) {
+    console.log('Creating card for task:', task);
+    
     const card = document.createElement('div');
     card.className = `task-card bg-gray-300 p-3 rounded flex flex-col gap-2 priority-${task.priority}`;
     card.draggable = true;
@@ -322,9 +330,24 @@ function createTaskCard(task) {
         meta.appendChild(assignee);
     }
 
+    if (task.assignedTo) {
+        const assignedTo = document.createElement('div');
+        assignedTo.textContent = `ASSIGNED TO: ${task.assignedTo}`;
+        meta.appendChild(assignedTo);
+    }
+
     if (task.dueDate) {
+        console.log('Task has due date:', task.dueDate);
         const dueDate = document.createElement('div');
-        dueDate.textContent = `DUE: ${new Date(task.dueDate).toLocaleDateString()}`;
+        const date = new Date(task.dueDate);
+        const formattedDate = date.toLocaleDateString('en-US', { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+        dueDate.textContent = `DUE: ${formattedDate}`;
+        dueDate.className = 'font-bold';
         meta.appendChild(dueDate);
     }
 
